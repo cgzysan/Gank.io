@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选项"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:padding="15dp"/>
+    <TextView
+        android:clickable="true"
+        android:id="@+id/tv_bitmap_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保存"
+        android:textSize="14sp"
+        android:padding="15dp"/>
+    <TextView
+        android:clickable="true"
+        android:id="@+id/tv_bitmap_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="分享"
+        android:textSize="14sp"
+        android:padding="15dp"/>
+
+    <TextView
+        android:clickable="true"
+        android:id="@+id/tv_bitmap_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="取消"
+        android:gravity="center_horizontal"
+        android:textSize="12sp"
+        android:padding="15dp"/>
+
+</LinearLayout>
