@@ -16,13 +16,7 @@ import ysan.gankio.R;
 import ysan.gankio.dialog.Mydialog;
 
 /**
- * 创建者     YSAN
- * 创建时间   2016/12/20 23:11
- * 描述	      ${TODO}
- * <p/>
- * 更新者     $Author$
- * 更新时间   $Date$
- * 更新描述   ${TODO}
+ * Created by YSAN on 2017/1/1 16:59
  */
 public class BitmapActivity extends AppCompatActivity {
     @Override

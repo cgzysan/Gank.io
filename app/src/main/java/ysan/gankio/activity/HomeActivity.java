@@ -5,69 +5,51 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import ysan.gankio.R;
-import ysan.gankio.bean.BaseModel;
 import ysan.gankio.bean.Welfare;
-import ysan.gankio.service.GankioService;
+import ysan.gankio.presenter.HomePresenter;
+import ysan.gankio.view.HomeView;
 import ysan.gankio.widget.SwipeRecyclerView;
 
-public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+/**
+ * Created by YSAN on 2016/12/31 18:59
+ */
 
-    private static final int REFRESH_DATA = 1;
-    private static final int LOADMORE_DATA = 2;
-    private List<Welfare> mDatas = new ArrayList<>();
+public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, HomeView {
+
     private Toolbar mToolbar;
-    private GridLayoutManager mLayoutManager;
+    private List<Welfare> mDatas = new ArrayList<>();
     private SwipeRecyclerView mSr;
-    private GankioService mGankioService;
-    private MyAdapter mMyadapter;
-    private int page;
-    private int action;
+    private HomePresenter mHomePresenter;
+    private GridLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        initRetrofit();
+        if (mHomePresenter == null) {
+            mHomePresenter = new HomePresenter(this);
+        }
         initView();
         initEvent();
         initData();
     }
 
     private void initData() {
-        getDatas(REFRESH_DATA);
+        mHomePresenter.initialize();
     }
 
-    private void initRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://gank.io/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        mGankioService = retrofit.create(GankioService.class);
-    }
 
     private void initEvent() {
         mSr.setOnRefreshListener(mOnRefreshListener);
@@ -85,109 +67,40 @@ public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         mLayoutManager = new GridLayoutManager(this, 3);
         mSr.setLayoutManager(mLayoutManager);
         /**设置adapter*/
-        mMyadapter = new MyAdapter();
-        mSr.setAdapter(mMyadapter);
+        mHomePresenter.setAdapter(mSr);
     }
 
-    class MyAdapter extends SwipeRecyclerView.Adapter<MyAdapter.MyViewHolder> {
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder vh = new MyViewHolder(LayoutInflater.from(HomeActivity.this).inflate(R.layout.activity_recycler_item, parent, false));
-            return vh;
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            final String url = mDatas.get(position).url;
-
-            Glide.with(holder.mImageView.getContext())
-                    .load(url)
-                    .centerCrop()
-                    .placeholder(R.color.app_primary_dark)
-                    .crossFade()
-                    .into(holder.mImageView);
-
-            holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(HomeActivity.this, BitmapActivity.class);
-                    intent.putExtra("url", url);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mDatas == null)
-                return 0;
-            return mDatas.size();
-        }
-
-        @Override
-        protected void loadMoreDatas(RecyclerView recyclerView, int dx, int dy) {
-            int position = mLayoutManager.findLastVisibleItemPosition();
-            int itemCount = mMyadapter.getItemCount();
-            if (position + 1 == itemCount) {
-                getDatas(LOADMORE_DATA);
-            }
-        }
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-
-            ImageView mImageView;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-                mImageView = (ImageView) itemView.findViewById(R.id.item_imageview);
-            }
-        }
-
+    @Override
+    public void onLoading() {
+        mSr.mSwipeRefreshLayout.setRefreshing(true);
     }
 
-    private void getDatas(final int action) {
+    @Override
+    public void onLoadCompleted() {
+        mSr.mSwipeRefreshLayout.setRefreshing(false);
+    }
 
-        if (action == REFRESH_DATA) {
-            page = 1;
-        } else {
-            page++;
-        }
+    @Override
+    public View inflateLayout(ViewGroup parent, boolean b) {
+        return LayoutInflater.from(HomeActivity.this).inflate(R.layout.activity_recycler_item, parent, false);
+    }
 
-        mGankioService.getWelfare(50, page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseModel<List<Welfare>>>() {
-                    @Override
-                    public void onStart() {
-                        mSr.mSwipeRefreshLayout.setRefreshing(true);
-                    }
+    @Override
+    public void skipActivity(String url) {
+        Intent intent = new Intent(HomeActivity.this, BitmapActivity.class);
+        intent.putExtra("url", url);
+        startActivity(intent);
+    }
 
-                    @Override
-                    public void onCompleted() {
-                        mSr.mSwipeRefreshLayout.setRefreshing(false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(">>>", "onError " + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(BaseModel<List<Welfare>> listBaseModel) {
-                        if (action == REFRESH_DATA) {
-                            mDatas.clear();
-                        }
-                        mDatas.addAll(listBaseModel.results);
-                        mMyadapter.notifyDataSetChanged();
-                    }
-                });
+    @Override
+    public int findLastPosition() {
+        return mLayoutManager.findLastVisibleItemPosition();
     }
 
     private SwipeRecyclerView.OnRefreshListener mOnRefreshListener = new SwipeRecyclerView.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            getDatas(REFRESH_DATA);
+            mHomePresenter.onRefreshData();
         }
     };
 

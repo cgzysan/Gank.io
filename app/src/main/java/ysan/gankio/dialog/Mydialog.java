@@ -13,13 +13,7 @@ import android.widget.Toast;
 import ysan.gankio.R;
 
 /**
- * 创建者     YSAN
- * 创建时间   2016/12/21 12:24
- * 描述	      ${TODO}
- * <p/>
- * 更新者     $Author$
- * 更新时间   $Date$
- * 更新描述   ${TODO}
+ * Created by YSAN on 2017/1/1 10:59
  */
 public class Mydialog extends Dialog implements View.OnClickListener {
 
