@@ -5,20 +5,20 @@ import java.util.List;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import ysan.gankio.bean.BaseModel;
+import ysan.gankio.bean.DataModel;
 import ysan.gankio.bean.Welfare;
 import ysan.gankio.service.ServiceManager;
 
 /**
  * Created by YSAN on 2017/1/3 11:14
  */
-public class HomeModelmp implements HomeModel {
+public class WelfareModelmp implements BaseModel {
     public static final int REFRESH_DATA = 1;
     public static final int LOADMORE_DATA = 2;
     private HomeOnListener mListener;
     private int page;
 
-    public HomeModelmp(HomeOnListener l) {
+    public WelfareModelmp(HomeOnListener l) {
         this.mListener = l;
     }
 
@@ -31,8 +31,7 @@ public class HomeModelmp implements HomeModel {
     public void refreshDatas() {
         getDatas(REFRESH_DATA);
     }
-
-    @Override
+    
     public void loadMoreDatas() {
         getDatas(LOADMORE_DATA);
     }
@@ -48,7 +47,7 @@ public class HomeModelmp implements HomeModel {
         ServiceManager.getInstance().mService.getWelfare(20, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<BaseModel<List<Welfare>>>() {
+                .subscribe(new Subscriber<DataModel<List<Welfare>>>() {
                     @Override
                     public void onStart() {
                         mListener.onStart();
@@ -65,8 +64,8 @@ public class HomeModelmp implements HomeModel {
                     }
 
                     @Override
-                    public void onNext(BaseModel<List<Welfare>> listBaseModel) {
-                        mListener.onNext(action, listBaseModel);
+                    public void onNext(DataModel<List<Welfare>> listDataModel) {
+                        mListener.onNext(action, listDataModel);
                     }
                 });
     }
@@ -78,6 +77,6 @@ public class HomeModelmp implements HomeModel {
 
         void onError(Throwable e);
 
-        void onNext(int action, BaseModel<List<Welfare>> listBaseModel);
+        void onNext(int action, DataModel<List<Welfare>> listDataModel);
     }
 }

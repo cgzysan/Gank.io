@@ -1,51 +1,48 @@
 package ysan.gankio.presenter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ysan.gankio.R;
-import ysan.gankio.activity.HomeActivity;
-import ysan.gankio.bean.BaseModel;
+import ysan.gankio.bean.DataModel;
 import ysan.gankio.bean.Welfare;
-import ysan.gankio.model.HomeModel;
-import ysan.gankio.model.HomeModelmp;
-import ysan.gankio.view.HomeView;
+import ysan.gankio.model.WelfareModelmp;
+import ysan.gankio.view.WelfareView;
 import ysan.gankio.widget.SwipeRecyclerView;
 
 /**
  * Created by YSAN on 2017/1/2 10:28
  */
-public class HomePresenter implements HomeModelmp.HomeOnListener {
+public class WelfarePresenter extends MvpBasePresenter<WelfareView> implements WelfareModelmp.HomeOnListener {
 
-    private HomeView mHomeView;
+    private WelfareView mHomeView;
     private List<Welfare> mDatas = new ArrayList<>();
-    private HomeActivity view;
-    private HomeModel mHomeModel;
+    private WelfareModelmp mWelfareModel;
     private HomeAdapter mAdapter;
 
 
-    public HomePresenter(HomeView homeView) {
+    public WelfarePresenter(WelfareView homeView) {
         this.mHomeView = homeView;
-        this.mHomeModel = new HomeModelmp(this);
+        this.mWelfareModel = new WelfareModelmp(this);
     }
 
 
     public void initialize(){
         mDatas.clear();
-        mHomeModel.initializeDatas();
+        mWelfareModel.initializeDatas();
     }
 
     public void onRefreshData() {
         mDatas.clear();
-        mHomeModel.refreshDatas();
+        mWelfareModel.refreshDatas();
     }
 
 
@@ -65,11 +62,11 @@ public class HomePresenter implements HomeModelmp.HomeOnListener {
     }
 
     @Override
-    public void onNext(int action, BaseModel<List<Welfare>> listBaseModel) {
-        if (action == HomeModelmp.REFRESH_DATA) {
+    public void onNext(int action, DataModel<List<Welfare>> listDataModel) {
+        if (action == WelfareModelmp.REFRESH_DATA) {
             mDatas.clear();
         }
-        mDatas.addAll(listBaseModel.results);
+        mDatas.addAll(listDataModel.results);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -118,7 +115,7 @@ public class HomePresenter implements HomeModelmp.HomeOnListener {
             int position = mHomeView.findLastPosition();
             int itemCount = getItemCount();
             if (position + 1 == itemCount) {
-                mHomeModel.loadMoreDatas();
+                mWelfareModel.loadMoreDatas();
             }
         }
 

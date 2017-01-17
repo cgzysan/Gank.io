@@ -6,7 +6,9 @@ import java.util.List;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
-import ysan.gankio.bean.BaseModel;
+import ysan.gankio.bean.FindModel;
+import ysan.gankio.bean.DataModel;
+import ysan.gankio.bean.FindBean;
 import ysan.gankio.bean.Welfare;
 
 /**
@@ -14,8 +16,16 @@ import ysan.gankio.bean.Welfare;
  */
 public interface GankioService {
     @GET("api/data/福利/{count}/{page}")
-    Observable<BaseModel<List<Welfare>>> getWelfare(
+    Observable<DataModel<List<Welfare>>> getWelfare(
             @Path("count") int count,
             @Path("page") int page
     );
+
+    @GET("api/day/{year}/{month}/{day}")
+    Observable<FindModel<FindBean>> getFindForDay(
+            @Path("year") int year,
+            @Path("month") int month,
+            @Path("day") int day
+    );
+
 }

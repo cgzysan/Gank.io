@@ -11,8 +11,8 @@
         <!--状态栏底色-->
         <item name="colorPrimaryDark">@color/app_primary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--window color-->
-        <item name="android:windowBackground">@color/app_window</item>
+        <!--&lt;!&ndash;window color&ndash;&gt;
+        <item name="android:windowBackground">@color/app_window</item>-->
     </style>
 
     <!-- Mydialog的style -->
@@ -27,6 +27,18 @@
         <item name="android:windowNoTitle">true</item>
         <!-- dialog外部可以点击 -->
         <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <!--底部RadioGroup样式-->
+    <style name="SmartBJTabStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/button_text_selector</item>
     </style>
 
 </resources>

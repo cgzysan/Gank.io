@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="18dp"
+    android:layout_marginLeft="13dp"
+    android:layout_marginRight="13dp"
+    android:layout_marginTop="18dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/fragment_tv_author"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="作者"/>
+
+    <TextView
+        android:id="@+id/fragment_find_des"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_tv_author"
+        android:text="这是对文章的标题或者描述"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/fragment_find_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_find_des"
+        android:text="Android"/>
+
+    <TextView
+        android:layout_marginLeft="70dp"
+        android:id="@+id/fragment_find_date"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@id/fragment_find_des"
+        android:layout_toRightOf="@id/fragment_find_category"
+        android:text="01.12 15:29"/>
+
+    <ImageView
+        android:id="@+id/fragment_find_icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/gankio"/>
+
+
+</RelativeLayout>

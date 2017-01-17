@@ -12,34 +12,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ysan.gankio.R;
-import ysan.gankio.bean.Welfare;
-import ysan.gankio.presenter.HomePresenter;
-import ysan.gankio.view.HomeView;
+import ysan.gankio.presenter.WelfarePresenter;
+import ysan.gankio.view.WelfareView;
 import ysan.gankio.widget.SwipeRecyclerView;
 
 /**
  * Created by YSAN on 2016/12/31 18:59
  */
 
-public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, HomeView {
+public class WelfareActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, WelfareView {
 
     private Toolbar mToolbar;
-    private List<Welfare> mDatas = new ArrayList<>();
     private SwipeRecyclerView mSr;
-    private HomePresenter mHomePresenter;
+    private WelfarePresenter mWelfarePresenter;
     private GridLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_welfare);
 
-        if (mHomePresenter == null) {
-            mHomePresenter = new HomePresenter(this);
+        if (mWelfarePresenter == null) {
+            mWelfarePresenter = new WelfarePresenter(this);
         }
         initView();
         initEvent();
@@ -47,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     }
 
     private void initData() {
-        mHomePresenter.initialize();
+        mWelfarePresenter.initialize();
     }
 
 
@@ -67,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         mLayoutManager = new GridLayoutManager(this, 3);
         mSr.setLayoutManager(mLayoutManager);
         /**设置adapter*/
-        mHomePresenter.setAdapter(mSr);
+        mWelfarePresenter.setAdapter(mSr);
     }
 
     @Override
@@ -82,12 +77,12 @@ public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
     @Override
     public View inflateLayout(ViewGroup parent, boolean b) {
-        return LayoutInflater.from(HomeActivity.this).inflate(R.layout.activity_recycler_item, parent, false);
+        return LayoutInflater.from(WelfareActivity.this).inflate(R.layout.activity_recycler_item, parent, false);
     }
 
     @Override
     public void skipActivity(String url) {
-        Intent intent = new Intent(HomeActivity.this, BitmapActivity.class);
+        Intent intent = new Intent(WelfareActivity.this, BitmapActivity.class);
         intent.putExtra("url", url);
         startActivity(intent);
     }
@@ -100,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private SwipeRecyclerView.OnRefreshListener mOnRefreshListener = new SwipeRecyclerView.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            mHomePresenter.onRefreshData();
+            mWelfarePresenter.onRefreshData();
         }
     };
 

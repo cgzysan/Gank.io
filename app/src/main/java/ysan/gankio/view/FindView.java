@@ -3,10 +3,14 @@ package ysan.gankio.view;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hannesdorfmann.mosby.mvp.MvpView;
+
+import java.util.List;
+
 /**
- * Created by YSAN on 2017/1/2 10:11
+ * Created by YSAN on 2017/1/7 12:04
  */
-public interface HomeView {
+public interface FindView extends MvpView {
     /**
      * 加载中
      */
@@ -23,12 +27,8 @@ public interface HomeView {
     View inflateLayout(ViewGroup parent, boolean b);
 
     /**
-     * 跳转
+     * banner设置图片加载器
+     * @param imageUrl
      */
-    void skipActivity(String url);
-
-    /**
-     * 获取最后一个可见item位置
-     */
-    int findLastPosition();
+    void setImageLoader(List<String> imageUrl);
 }

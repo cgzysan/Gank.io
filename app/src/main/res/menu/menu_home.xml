@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_more"
-        android:icon="@drawable/tool_menu_more_selector"
+        android:icon="@drawable/selector_tool_menu_more"
         android:title="@string/toolbar_more"
         app:showAsAction="ifRoom"/>
 
